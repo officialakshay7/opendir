@@ -1,0 +1,349 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Direct Download Almost Anything | Open Directory Finder</title>
+  <meta name="description" content="Find open directories and direct download links for movies, music, books, software and more. The fastest open directory search tool online."/>
+  <meta name="keywords" content="open directory finder, direct download almost anything, github.io open directory, index of mp3, index of mp4, open directory search"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f5f5f5;
+      color: #111;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    nav {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo { font-weight: 600; font-size: 1rem; color: #111; }
+    .logo span { color: #2563eb; }
+    nav a { font-size: 0.82rem; color: #666; text-decoration: none; }
+    nav a:hover { color: #111; }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px 40px;
+    }
+
+    h1 { font-size: 1.6rem; font-weight: 600; color: #111; margin-bottom: 6px; text-align: center; }
+    .sub { font-size: 0.82rem; color: #888; margin-bottom: 32px; text-align: center; }
+
+    .search-box {
+      display: flex;
+      width: 100%;
+      max-width: 560px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      margin-bottom: 16px;
+    }
+
+    .search-box:focus-within { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+
+    #query {
+      flex: 1; border: none; outline: none;
+      font-family: 'Inter', sans-serif; font-size: 0.9rem;
+      padding: 13px 16px; color: #111; background: transparent;
+    }
+
+    #query::placeholder { color: #aaa; }
+
+    .search-btn {
+      background: #2563eb; border: none; color: #fff;
+      font-family: 'Inter', sans-serif; font-weight: 500; font-size: 0.85rem;
+      padding: 0 20px; cursor: pointer; transition: background 0.15s; white-space: nowrap;
+    }
+    .search-btn:hover { background: #1d4ed8; }
+
+    .filters { width: 100%; max-width: 560px; margin-bottom: 10px; }
+
+    .filter-label { font-size: 0.72rem; color: #999; font-weight: 500; margin-bottom: 6px; display: block; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+
+    .chip {
+      background: #fff; border: 1px solid #e0e0e0; color: #555;
+      font-family: 'Inter', sans-serif; font-size: 0.75rem;
+      padding: 5px 12px; border-radius: 20px; cursor: pointer; transition: all 0.15s;
+    }
+    .chip:hover { border-color: #2563eb; color: #2563eb; }
+    .chip.active { background: #2563eb; border-color: #2563eb; color: #fff; }
+
+    .engines {
+      width: 100%; max-width: 560px;
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 48px;
+    }
+
+    .engine-label { font-size: 0.72rem; color: #999; align-self: center; margin-right: 4px; }
+
+    .eng-btn {
+      background: #fff; border: 1px solid #e0e0e0; color: #555;
+      font-family: 'Inter', sans-serif; font-size: 0.75rem;
+      padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: all 0.15s;
+    }
+    .eng-btn:hover { border-color: #111; color: #111; }
+
+    .section { width: 100%; max-width: 560px; margin-bottom: 40px; }
+
+    .section-title {
+      font-size: 0.72rem; font-weight: 600; color: #999;
+      text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;
+    }
+
+    .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+
+    .cat-card {
+      background: #fff; border: 1px solid #e5e5e5; border-radius: 8px;
+      padding: 14px; cursor: pointer; transition: all 0.15s; text-align: center;
+    }
+    .cat-card:hover { border-color: #2563eb; box-shadow: 0 2px 8px rgba(37,99,235,0.08); }
+
+    .cat-icon { font-size: 1.3rem; display: block; margin-bottom: 4px; }
+    .cat-name { font-size: 0.75rem; font-weight: 500; color: #333; display: block; }
+    .cat-ext  { font-size: 0.65rem; color: #aaa; }
+
+    .faq-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .faq-item { background: #fff; border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden; }
+
+    .faq-q {
+      width: 100%; background: none; border: none;
+      font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 500; color: #333;
+      text-align: left; padding: 14px 16px; cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .faq-q:hover { color: #2563eb; }
+    .faq-arrow { color: #bbb; transition: transform 0.2s; font-size: 0.7rem; }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+
+    .faq-a {
+      display: none; padding: 0 16px 14px;
+      font-size: 0.78rem; color: #666; line-height: 1.7; border-top: 1px solid #f0f0f0;
+    }
+    .faq-item.open .faq-a { display: block; }
+
+    .vpn-card {
+      background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px;
+      padding: 16px 20px; display: flex; align-items: center;
+      justify-content: space-between; gap: 16px; flex-wrap: wrap;
+      margin-bottom: 40px; width: 100%; max-width: 560px;
+    }
+    .vpn-text p { font-size: 0.78rem; color: #92400e; line-height: 1.5; }
+    .vpn-text strong { display: block; margin-bottom: 2px; color: #78350f; }
+
+    .vpn-btn {
+      background: #f59e0b; color: #fff; border: none;
+      font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.78rem;
+      padding: 9px 18px; border-radius: 6px; cursor: pointer;
+      text-decoration: none; white-space: nowrap; transition: background 0.15s; display: inline-block;
+    }
+    .vpn-btn:hover { background: #d97706; }
+
+    footer { background: #fff; border-top: 1px solid #e5e5e5; padding: 20px; text-align: center; }
+    footer p { font-size: 0.72rem; color: #aaa; line-height: 1.8; }
+    footer a { color: #2563eb; text-decoration: none; }
+
+    @media (max-width: 480px) {
+      h1 { font-size: 1.3rem; }
+      .vpn-card { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">open<span>dir</span>.online</div>
+  <a href="#how">How it works</a>
+</nav>
+
+<main>
+
+  <h1>Direct Download Almost Anything</h1>
+  <p class="sub">Search open directories for movies, music, books, software & more</p>
+
+  <div class="search-box">
+    <input type="text" id="query" placeholder="e.g. interstellar 1080p mkv" autocomplete="off"/>
+    <button class="search-btn" onclick="doSearch('google')">Search</button>
+  </div>
+
+  <div class="filters">
+    <span class="filter-label">Category</span>
+    <div class="chips" id="cats">
+      <button class="chip active" data-cat="">All</button>
+      <button class="chip" data-cat="movies">🎬 Movies</button>
+      <button class="chip" data-cat="music">🎵 Music</button>
+      <button class="chip" data-cat="books">📚 Books</button>
+      <button class="chip" data-cat="software">💾 Software</button>
+      <button class="chip" data-cat="games">🎮 Games</button>
+      <button class="chip" data-cat="photos">📷 Photos</button>
+    </div>
+    <span class="filter-label">File Type</span>
+    <div class="chips" id="exts">
+      <button class="chip active" data-ext="">Any</button>
+      <button class="chip" data-ext="mp4">mp4</button>
+      <button class="chip" data-ext="mkv">mkv</button>
+      <button class="chip" data-ext="mp3">mp3</button>
+      <button class="chip" data-ext="pdf">pdf</button>
+      <button class="chip" data-ext="epub">epub</button>
+      <button class="chip" data-ext="zip">zip</button>
+      <button class="chip" data-ext="exe">exe</button>
+    </div>
+  </div>
+
+  <div class="engines">
+    <span class="engine-label">Search via:</span>
+    <button class="eng-btn" onclick="doSearch('google')">Google</button>
+    <button class="eng-btn" onclick="doSearch('bing')">Bing</button>
+    <button class="eng-btn" onclick="doSearch('ddg')">DuckDuckGo</button>
+    <button class="eng-btn" onclick="doSearch('yahoo')">Yahoo</button>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Quick Search</div>
+    <div class="cat-grid">
+      <div class="cat-card" onclick="quickSearch('movies','mkv')">
+        <span class="cat-icon">🎬</span>
+        <span class="cat-name">Movies</span>
+        <span class="cat-ext">mp4 · mkv</span>
+      </div>
+      <div class="cat-card" onclick="quickSearch('music','mp3')">
+        <span class="cat-icon">🎵</span>
+        <span class="cat-name">Music</span>
+        <span class="cat-ext">mp3 · flac</span>
+      </div>
+      <div class="cat-card" onclick="quickSearch('ebooks','pdf')">
+        <span class="cat-icon">📚</span>
+        <span class="cat-name">Books</span>
+        <span class="cat-ext">pdf · epub</span>
+      </div>
+      <div class="cat-card" onclick="quickSearch('software','exe')">
+        <span class="cat-icon">💾</span>
+        <span class="cat-name">Software</span>
+        <span class="cat-ext">exe · zip</span>
+      </div>
+      <div class="cat-card" onclick="quickSearch('games','iso')">
+        <span class="cat-icon">🎮</span>
+        <span class="cat-name">Games</span>
+        <span class="cat-ext">iso · zip</span>
+      </div>
+      <div class="cat-card" onclick="quickSearch('courses tutorials','mp4')">
+        <span class="cat-icon">🎓</span>
+        <span class="cat-name">Courses</span>
+        <span class="cat-ext">mp4 · pdf</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="vpn-card">
+    <div class="vpn-text">
+      <p><strong>⚠️ Stay private while browsing</strong>Open directories expose your IP. A VPN keeps your downloads private from your ISP.</p>
+    </div>
+    <a class="vpn-btn" href="#" rel="nofollow sponsored" target="_blank">Get NordVPN</a>
+  </div>
+
+  <div class="section" id="how">
+    <div class="section-title">How it works & FAQ</div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What is an open directory? <span class="faq-arrow">▼</span></button>
+        <div class="faq-a">An open directory is a web server folder that has not been password protected, allowing anyone to browse and download files directly. This tool uses the intitle:"index of" search trick to find them across Google, Bing and other engines.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">How do I search? <span class="faq-arrow">▼</span></button>
+        <div class="faq-a">Type a file name or keyword, pick a category and file type to narrow results, then click Search or choose a search engine. The tool automatically adds the right search operators so you don't have to.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Why try multiple search engines? <span class="faq-arrow">▼</span></button>
+        <div class="faq-a">Google has the largest index, but Bing and DuckDuckGo often surface different results. If you can't find something on one engine, try another — it works more often than you'd expect.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Is this legal? <span class="faq-arrow">▼</span></button>
+        <div class="faq-a">Browsing open directories is legal. Downloading copyrighted content without permission may violate copyright laws in your country. This tool is intended for finding publicly and freely shared files only.</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>opendir · Open directory search · Direct download almost anything<br/>
+  We do not host any files. <a href="#">Privacy</a> · <a href="#">About</a></p>
+</footer>
+
+<script defer>
+  let activeCat = '';
+  let activeExt = '';
+
+  document.querySelectorAll('#cats .chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#cats .chip').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCat = btn.dataset.cat;
+    });
+  });
+
+  document.querySelectorAll('#exts .chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#exts .chip').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeExt = btn.dataset.ext;
+    });
+  });
+
+  function buildQuery(q, cat, ext) {
+    let parts = ['intitle:"index of"'];
+    if (q)   parts.push(q);
+    if (cat) parts.push(cat);
+    if (ext) parts.push('".' + ext + '"');
+    return parts.join(' ');
+  }
+
+  function doSearch(engine) {
+    const q = document.getElementById('query').value.trim();
+    const finalQ = buildQuery(q, activeCat, activeExt);
+    const urls = {
+      google: 'https://www.google.com/search?q=' + encodeURIComponent(finalQ),
+      bing:   'https://www.bing.com/search?q='   + encodeURIComponent(finalQ),
+      ddg:    'https://duckduckgo.com/?q='        + encodeURIComponent(finalQ),
+      yahoo:  'https://search.yahoo.com/search?p='+ encodeURIComponent(finalQ),
+    };
+    window.open(urls[engine], '_blank');
+  }
+
+  function quickSearch(cat, ext) {
+    const q = document.getElementById('query').value.trim();
+    const finalQ = buildQuery(q, cat, ext);
+    window.open('https://www.google.com/search?q=' + encodeURIComponent(finalQ), '_blank');
+  }
+
+  document.getElementById('query').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doSearch('google');
+  });
+
+  function toggleFaq(btn) {
+    btn.parentElement.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>
