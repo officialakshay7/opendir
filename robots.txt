@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://open-directory.pages.dev/sitemap.xml
+Sitemap: https://opendirectory-ewasion-github.pages.dev/sitemap.xml
